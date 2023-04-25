@@ -27,6 +27,7 @@ export default async function handler(request, response) {
       messages
     );
 
+    console.log('用户隐私保护');
     // pipe the stream to the response
     return new Response(stream);
   } catch (error) {
