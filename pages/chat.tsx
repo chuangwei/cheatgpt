@@ -12,6 +12,7 @@ import {
 } from "react-icons/io5";
 
 const storageKey = "cheatGPT-20220401";
+const passwordKey = "password-20220401";
 
 function getDate() {
   const now = new Date();
@@ -88,8 +89,7 @@ function Page() {
   function handleKeyDown(event) {
     if (event.keyCode === 13) {
       if (whatISaid) {
-        setContent(whatISaid);
-        setWhatISaid("");
+        onSubmit();
       }
     }
   }
@@ -168,6 +168,7 @@ function Page() {
       }
 
       setIsLoading("start");
+      const password = window.localStorage.getItem(passwordKey);
 
       // 发送请求
       fetch("/api/stream", {
@@ -175,6 +176,7 @@ function Page() {
         body: JSON.stringify({
           prompt: "你是一个AI助手，你的任务是回答问题并提供帮助",
           messages: [...messages.slice(-4), { role: "user", content }],
+          password,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -221,6 +223,21 @@ function Page() {
         });
     }
   }, [content]);
+
+  const onSubmit = () => {
+    if (whatISaid.startsWith("pwd") && whatISaid.length < 20) {
+      window.localStorage.setItem(passwordKey, whatISaid);
+      setWhatISaid("");
+      setAssiContent("密码已设置！");
+
+      setTimeout(() => {
+        setAssiContent("");
+      }, 2000);
+    } else {
+      setContent(whatISaid);
+      setWhatISaid("");
+    }
+  };
 
   return (
     <div>
@@ -477,16 +494,13 @@ function Page() {
               ref={inputRef}
               value={whatISaid}
               onKeyDown={handleKeyDown}
-              onChange={(e) => setWhatISaid(e.target.value)}
+              onChange={(e) => setWhatISaid(e.target.value.trim())}
               placeholder="在这里输入你的问题"
               className="input input-sm  w-full  mr-2 input-accent"
             />
 
             <button
-              onClick={() => {
-                setContent(whatISaid);
-                setWhatISaid("");
-              }}
+              onClick={onSubmit}
               className="btn btn-sm btn-accent border-none text-slate-600  w-15 text-center"
             >
               发送
