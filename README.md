@@ -1,3 +1,5 @@
+需要自备：chatgpt账号，
+
 
 五分钟 vercel 部署chectGPT， 查看以下链接
 
