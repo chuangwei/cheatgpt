@@ -15,7 +15,6 @@ export const config = {
 export default async function handler(request, response) {
   const { prompt, messages } = (await request.json()) as ChatBody;
 
-  console.log(prompt, messages);
   try {
     const stream = await OpenAIStream(
       {
@@ -27,13 +26,11 @@ export default async function handler(request, response) {
       messages
     );
 
-    // 如果是公开给别人，请保护用户隐私，不记录请求信息， cheatgpt开源使用宗旨
-    console.log("user privacy protection");
     // pipe the stream to the response
     return new Response(stream);
   } catch (error) {
     console.error(error);
-    return new Response("发生未知错误，管理员在紧急修复中，请稍后", {
+    return new Response(error, {
       status: 500,
     });
   }
