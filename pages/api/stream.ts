@@ -27,7 +27,8 @@ export default async function handler(request, response) {
       messages
     );
 
-    console.log('用户隐私保护');
+    // 如果是公开给别人，请保护用户隐私，不记录请求信息， cheatgpt开源使用宗旨
+    console.log("user privacy protection");
     // pipe the stream to the response
     return new Response(stream);
   } catch (error) {
