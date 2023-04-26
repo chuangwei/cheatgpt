@@ -494,7 +494,7 @@ function Page() {
               ref={inputRef}
               value={whatISaid}
               onKeyDown={handleKeyDown}
-              onChange={(e) => setWhatISaid(e.target.value.trim())}
+              onChange={(e) => setWhatISaid(e.target.value)}
               placeholder="在这里输入你的问题"
               className="input input-sm  w-full  mr-2 input-accent"
             />
